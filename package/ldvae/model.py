@@ -211,11 +211,10 @@ class LDVAE(nn.Module):
         mean, std = torch.zeros_like(z_mean), torch.ones_like(z_var)
         kl_z = kl_divergence(Normal(z_mean,torch.sqrt(z_var)), Normal(mean, std)).sum(dim=1)
 
-        try:
-            if (self.local_l_mean is None) or (self.local_l_var is None):
-                raise ValueError('please use loss() after set_local_l_mean_and_var()')
-        except :
-            traceback.print_exc()
+        # error
+        if (self.local_l_mean is None) or (self.local_l_var is None):
+            raise ValueError('Please use set_local_l_mean_and_var() before loss()')
+                
             
         mean, var = self.local_l_mean*torch.ones_like(l_mean), self.local_l_var*torch.ones_like(l_var)
         kl_l = kl_divergence(Normal(l_mean,torch.sqrt(l_var)), Normal(mean, torch.sqrt(var))).sum(dim=1)
