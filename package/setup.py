@@ -5,6 +5,6 @@ setup(
 	version='0.0.0',
 	description='LDVAE model',
 	author='kicysh',
-	install_requires=['torch'],
+	install_requires=['torch', 'numpy'],
 	packages=['ldvae'],
 )
