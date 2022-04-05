@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.distributions import Normal, kl_divergence
 
 class LDVAE(nn.Module):
     """
@@ -49,8 +50,8 @@ class LDVAE(nn.Module):
         self.hidden_dims = hidden_dims
         self.eps = eps
 
-        # theta use reconst error
-        self.theta = nn.Parameter(torch.randn(genes_cnt))
+        # log_theta use reconst error
+        self.log_theta = nn.Parameter(torch.randn(genes_cnt))
 
         # encoder_z, encoder_z_var, encoder_z_mean
         encoder_layers = []
@@ -105,7 +106,6 @@ class LDVAE(nn.Module):
         ----------
         x: torch.Tensor
             input tensor (genes * cells)
-
 
         Return
         ------
@@ -170,7 +170,7 @@ class LDVAE(nn.Module):
         """
         get reconst error
         """
-        eps = SETTING_EPS
+        eps = self.eps
         log_theta_mu_eps = torch.log(theta + mu + eps)
 
         res = (
@@ -216,5 +216,5 @@ class LDVAE(nn.Module):
         mean, var = self.local_l_mean*torch.ones_like(l_mean), self.local_l_var*torch.ones_like(l_var)
         kl_l = kl_divergence(Normal(l_mean,torch.sqrt(l_var)), Normal(mean, torch.sqrt(var))).sum(dim=1)
 
-        reconst = self.reconst_error(x, mu=y, theta=torch.exp(self.theta)).sum(dim=-1)        
+        reconst = self.reconst_error(x, mu=y, theta=torch.exp(self.log_theta)).sum(dim=-1)        
         return reconst, kl_l ,kl_z
