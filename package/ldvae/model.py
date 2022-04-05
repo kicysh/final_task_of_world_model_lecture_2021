@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 from torch.distributions import Normal, kl_divergence
+import numpy as np
+
+import traceback
 
 class LDVAE(nn.Module):
     """
@@ -16,9 +19,9 @@ class LDVAE(nn.Module):
         hidden_dims: tuple,
         hidden_l_dims: tuple= (128,),
         latent_dim: int = 20,
-        drop_use: boolean = True,
+        drop_use: bool = True,
         drop_rate: float = 0.1,
-        norm_use: boolean = True,
+        norm_use: bool = True,
         norm_momentum: float = 0.01,
         eps: float = 1e-8,
     ):
@@ -88,14 +91,13 @@ class LDVAE(nn.Module):
         self.encoder_l_var = nn.Linear(hidden_l_dims[-1],1)
 
         # decoder
-        self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, genes_cnt,bias=False),
-            if norm_use:
-                nn.BatchNorm1d(genes_cnt,
-                                eps=eps, 
-                                momentum=norm_momentum)
-            else: None
-        )
+        decoder = []
+        decoder.append(nn.Linear(latent_dim, genes_cnt,bias=False))
+        if norm_use:
+            decoder.append(nn.BatchNorm1d(genes_cnt,
+                            eps=eps, 
+                            momentum=norm_momentum))
+        self.decoder = nn.Sequential(*decoder)
 
 
     def forward(self,x: torch.Tensor):
@@ -128,10 +130,6 @@ class LDVAE(nn.Module):
         --------
         loss: get loss
         """
-
-        # Error
-        assert(self.local_l_mean is not None,
-               'Please use set_local_l_mean_and_var() befor forward()')
 
         # create latent variables(z) 
         x_z = self.encoder_z(x)
@@ -213,6 +211,7 @@ class LDVAE(nn.Module):
         mean, std = torch.zeros_like(z_mean), torch.ones_like(z_var)
         kl_z = kl_divergence(Normal(z_mean,torch.sqrt(z_var)), Normal(mean, std)).sum(dim=1)
 
+        
         mean, var = self.local_l_mean*torch.ones_like(l_mean), self.local_l_var*torch.ones_like(l_var)
         kl_l = kl_divergence(Normal(l_mean,torch.sqrt(l_var)), Normal(mean, torch.sqrt(var))).sum(dim=1)
 
