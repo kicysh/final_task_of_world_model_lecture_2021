@@ -4,7 +4,7 @@
 ```
 git clone https://github.com/kicysh/final_task_of_world_model_lecture_2021/
 cd final_task_of_world_model_lecture_2021/package
-pip install .
+pip install . --use-feature=in-tree-build
 ```
 
 ## 論文
