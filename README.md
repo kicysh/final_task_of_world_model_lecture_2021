@@ -6,6 +6,25 @@ git clone https://github.com/kicysh/final_task_of_world_model_lecture_2021/
 cd final_task_of_world_model_lecture_2021/package
 pip install . --use-feature=in-tree-build
 ```
+# directory
+## tree
+```bash
+.
+├── docs
+│   └── reproduction_paper_fig.ipynb
+├── package
+│   ├── ldvae
+│   │   ├── __init__.py
+│   │   └── model.py
+│   └── setup.py
+├── README.md
+└── src
+    └── *.ipynb
+```
+## detail
+- docs/reproduction_paper_fig.ipynb
+figの再現  
+
 
 ## 論文
 ### models
