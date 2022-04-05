@@ -1,5 +1,12 @@
 # final_task_of_world_model_lecture_2021
 
+# How to install
+```
+git clone https://github.com/kicysh/final_task_of_world_model_lecture_2021/
+cd final_task_of_world_model_lecture_2021/package
+pip install .
+```
+
 ## 論文
 ### models
 [scVI](https://www.nature.com/articles/s41592-018-0229-2.epdf?author_access_token=5sMbnZl1iBFitATlpKkddtRgN0jAjWel9jnR3ZoTv0P1-tTjoP-mBfrGiMqpQx63aBtxToJssRfpqQ482otMbBw2GIGGeinWV4cULBLPg4L4DpCg92dEtoMaB1crCRDG7DgtNrM_1j17VfvHfoy1cQ%3D%3D)
