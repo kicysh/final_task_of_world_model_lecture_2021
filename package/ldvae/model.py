@@ -23,6 +23,7 @@ class LDVAE(nn.Module):
         drop_rate: float = 0.1,
         norm_use: bool = True,
         norm_momentum: float = 0.01,
+        norm_eps: float = 0.001,
         eps: float = 1e-8,
     ):
         """
@@ -45,7 +46,8 @@ class LDVAE(nn.Module):
         norm_momentum: float, default 0.01
             Add nn.BatchNorm1d(momentum=norm_momentum). Ignore this if set 
             norm_momentum to False.
-        eps: float, default 1e-8
+        norm_eps: float, default 1e-8
+        eps: float, default 0.001
         """
         super(LDVAE,self).__init__()
         self.local_l_mean = None
@@ -63,7 +65,7 @@ class LDVAE(nn.Module):
             encoder_layers.append(nn.Linear(old_dim, dim))
             if norm_use:
                 encoder_layers.append(nn.BatchNorm1d(dim,
-                                                    eps=eps, 
+                                                    eps=norm_eps, 
                                                     momentum=norm_momentum))
             encoder_layers.append(nn.ReLU())
             if drop_use:
@@ -80,7 +82,7 @@ class LDVAE(nn.Module):
             encoder_layers.append(nn.Linear(in_dim, dim))
             if norm_use:
                 encoder_layers.append(nn.BatchNorm1d(dim,
-                                                    eps=eps, 
+                                                    eps=norm_eps, 
                                                     momentum=norm_momentum))
             encoder_layers.append(nn.ReLU())
             if drop_use:
@@ -91,12 +93,12 @@ class LDVAE(nn.Module):
         self.encoder_l_var = nn.Linear(hidden_l_dims[-1],1)
 
         # decoder
-        decoder = []
-        decoder.append(nn.Linear(latent_dim, genes_cnt,bias=False))
+        decoder_layers = []
+        decoder_layers.append(nn.Linear(latent_dim, genes_cnt,bias=False))
         if norm_use:
-            decoder.append(nn.BatchNorm1d(genes_cnt,
-                            eps=eps, 
-                            momentum=norm_momentum))
+            decoder_layers.append(nn.BatchNorm1d(genes_cnt,
+                                eps=norm_eps, 
+                                momentum=norm_momentum))
         self.decoder = nn.Sequential(*decoder)
 
 
