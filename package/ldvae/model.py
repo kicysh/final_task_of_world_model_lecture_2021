@@ -211,7 +211,7 @@ class LDVAE(nn.Module):
         l_mean, l_var, library = ls
 
         mean, std = torch.zeros_like(z_mean), torch.ones_like(z_var)
-        kl_z = kl_divergence(Normal(z_mean,torch.sqrt(z_var)), Normal(mean, std)).sum(dim=1)
+        kl_z = kl_divergence(Normal(z_mean,torch.clip(torch.sqrt(z_var),min=self.eps)), Normal(mean, std)).sum(dim=1)
 
         # error
         if (self.local_l_mean is None) or (self.local_l_var is None):
