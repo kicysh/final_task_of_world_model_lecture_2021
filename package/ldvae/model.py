@@ -99,7 +99,7 @@ class LDVAE(nn.Module):
             decoder_layers.append(nn.BatchNorm1d(genes_cnt,
                                 eps=norm_eps, 
                                 momentum=norm_momentum))
-        self.decoder = nn.Sequential(*decoder)
+        self.decoder = nn.Sequential(*decoder_layers)
 
 
     def forward(self,x: torch.Tensor):
