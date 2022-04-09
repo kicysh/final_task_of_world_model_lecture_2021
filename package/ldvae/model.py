@@ -54,7 +54,9 @@ class LDVAE(nn.Module):
         self.local_l_var = None
         self.hidden_dims = hidden_dims
         self.eps = eps
-
+        
+        self.norm_use = norm_use
+        
         # log_theta use reconst error
         self.log_theta = nn.Parameter(torch.randn(genes_cnt))
 
@@ -223,3 +225,26 @@ class LDVAE(nn.Module):
 
         reconst = self.reconst_error(x, mu=y, theta=torch.exp(self.log_theta)).sum(dim=-1)        
         return reconst, kl_l ,kl_z
+
+    
+    def get_decoder_weight(self) -> np.array:
+        """
+        return
+        -------
+        weight: pd.DataFrame
+            return decoder weight.
+            If set norm_use to True, return a value that takes into account the batch norm layer.
+        """
+        _w = self.decoder[0].weight
+        if norm_use:
+            bn = self.decoder[1]
+            sigma = torch.sqrt(bn.running_var + bn.eps)
+            gamma = bn.weight
+            b = gamma / sigma
+            bI = torch.diag(b)
+            loadings = torch.matmul(bI, _w)
+        else:
+            loadings = _w
+        loadings = loadings.detach().cpu().numpy()
+        return loadings
+    
