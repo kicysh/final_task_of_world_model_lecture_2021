@@ -18,13 +18,15 @@ pip install . --use-feature=in-tree-build
 │   │   └── model.py
 │   └── setup.py
 ├── README.md
-└── src
-    └── *.ipynb
+└── docs
+    ├── reproduction_paper_fig.ipynb
+    └── compare_models.ipynb 
 ```
 ## detail
-- docs/reproduction_paper_fig.ipynb
-figの再現  
-
+- docs/reproduction_paper_fig.ipynb  
+論文のfig1cの再現  
+- docs/compare_models.ipynb  
+比較に用いるデータおよびコード
 
 ## 論文
 ### models
