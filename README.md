@@ -26,7 +26,8 @@ pip install . --use-feature=in-tree-build
 - docs/reproduction_paper_fig.ipynb  
 論文のfig1cの再現  
 - docs/compare_models.ipynb  
-比較に用いるデータおよびコード
+比較に用いるデータおよびコード  
+手直し中
 
 ## 論文
 ### models
