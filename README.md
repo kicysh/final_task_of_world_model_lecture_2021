@@ -11,23 +11,22 @@ pip install . --use-feature=in-tree-build
 ```bash
 .
 ├── docs
-│   └── reproduction_paper_fig.ipynb
+│   ├── reproduction_paper_fig.ipynb
+│   └── compare_models.ipynb 
 ├── package
 │   ├── ldvae
 │   │   ├── __init__.py
 │   │   └── model.py
 │   └── setup.py
-├── README.md
-└── docs
-    ├── reproduction_paper_fig.ipynb
-    └── compare_models.ipynb 
+└── README.md
+
 ```
 ## detail
 - docs/reproduction_paper_fig.ipynb  
 論文のfig1cの再現  
 - docs/compare_models.ipynb  
 比較に用いるデータおよびコード  
-手直し中
+再現性の確認中
 
 ## 論文
 ### models
